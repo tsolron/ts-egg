@@ -1,23 +1,19 @@
 extends Panel
 
-onready var T_Marker = preload("res://scenes/EGG_Marker.tscn");
-onready var N_Markers = $Markers;
-
+onready var vpc = get_parent().get_parent();
 var doDrawGraph = true;
 var color = Color(1.0, 0.0, 0.0);
-var markers = Array();
 
 
-
-func _ready():
-	add_marker(0, true);
-	add_marker(1, false);
+func init():
+	vpc.add_marker(0, Vector2(0,0), true);
+	vpc.add_marker(1, Vector2(0.5,0), false);
+	vpc.add_marker(2, Vector2(1,0), true);
 
 
 func _draw():
 	if (doDrawGraph):
 		drawGraph();
-	pass;
 
 
 func _process(delta):
@@ -26,42 +22,23 @@ func _process(delta):
 
 func drawGraph():
 	var gsize = rect_size;
-	var goffset = Vector2(0.0, get_global_rect().size[1]);
+	var goffset = Vector2(0.0, 0.0);
 	
-	var nb_points = 32
+	var nb_points = 64
 	var points_graph = PoolVector2Array();
 	
 	for i in range(nb_points + 1):
 		var x = float(i)/float(nb_points);
 		var y = fn_ease_in_expo(x);
 		
-		points_graph.push_back(Vector2(x, -y));
+		points_graph.push_back(Vector2(x, y));
 	
 	for idx_pt in range(nb_points):
 		draw_line(points_graph[idx_pt]*gsize+goffset, points_graph[idx_pt + 1]*gsize+goffset, color)
 
 
-func add_marker(after_i, make_disabled):
-	if (after_i < 0 || after_i > markers.size()):
-		return;
-	
-	var new_marker = T_Marker.instance();
-	new_marker.graph = self;
-	
-	new_marker.init(make_disabled);
-	
-	markers.insert(after_i, new_marker);
-	N_Markers.add_child(new_marker);
-
-
-func get_coords_from_marker(marker):
-	var coords = marker.rect_position;
-	coords[0] += (marker.rect_size[0] / 2);
-	coords[0] /= self.rect_size[0];
-	
-	coords[1] = fn_ease_in_expo(coords[0]);
-	
-	return coords;
+func y(x):
+	return fn_ease_in_expo(x);
 
 
 func _on_DrawButton_pressed():

@@ -1,30 +1,32 @@
 extends ToolButton
 
-var graph = null;
+onready var T_style_disabled = preload("res://themes/sbflat_disabled.tres");
+onready var T_style_editable = preload("res://themes/sbflat_editable.tres");
+
+onready var l_edit = $LineEdit;
+
 var doDrag = false;
+var g_coords = Vector2(0,0);
 var label_text_template = "x: %.3f\r\ny: %.3f";
 
 func init(make_disabled):
 	if (make_disabled):
 		self.disabled = true;
 		self.button_mask = 0;
+		self.mouse_filter = Control.MOUSE_FILTER_IGNORE;
+		$LineEdit.editable = false;
+		#add_stylebox_override("normal", T_style_disabled)
+		#set("custom_styles/normal", T_style_disabled);
+	#else:
+		#set("custom_styles/normal", T_style_editable);
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	update_text();
-	
-	var newx = rect_position[0];
-	if (doDrag):
-		var x_min = graph.get_global_rect().position[0];
-		var x_max = graph.rect_size[0] + x_min;
-		newx = get_global_mouse_position()[0]
-		newx = max(x_min, min(x_max, newx)) - x_min - rect_size[0]/2;
-	set_position(Vector2(newx, 0));
 
 
 func update_text():
-	var coords = graph.get_coords_from_marker(self);
-	$Label.text = label_text_template % [coords[0], coords[1]];
+	$Label.text = label_text_template % [g_coords[0], g_coords[1]];
 
 func _on_EGG_Marker_button_down():
 	doDrag = true;
@@ -32,3 +34,17 @@ func _on_EGG_Marker_button_down():
 
 func _on_EGG_Marker_button_up():
 	doDrag = false;
+
+
+func get_x():
+	return rect_position[0];
+
+
+func set_gcoords(gc):
+	g_coords = gc;
+	
+func update_x(scale_x):
+	set_position(Vector2((g_coords[0] * scale_x) - rect_size[0]/2, 0));
+
+func get_percent():
+	return g_coords[0];
