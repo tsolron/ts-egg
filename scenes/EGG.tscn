@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/graph.gd" type="Script" id=1]
+[ext_resource path="res://scripts/AppBG.gd" type="Script" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -9,20 +10,21 @@ bg_color = Color( 0.35, 0.35, 0.35, 1 )
 
 [node name="EGG" type="Node2D"]
 
-[node name="Panel2" type="Panel" parent="."]
-margin_right = 664.0
-margin_bottom = 272.0
-rect_min_size = Vector2( 664, 272 )
+[node name="AppBG" type="Panel" parent="."]
+margin_right = 800.0
+margin_bottom = 312.0
+rect_min_size = Vector2( 800, 352 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 1 )
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel2"]
-margin_right = 579.0
-margin_bottom = 136.0
+[node name="MarginContainer" type="MarginContainer" parent="AppBG"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 8
@@ -33,34 +35,104 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel2/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AppBG/MarginContainer"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 656.0
-margin_bottom = 264.0
-custom_constants/separation = 8
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 792.0
+margin_bottom = 344.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 4
 
-[node name="Panel" type="Panel" parent="Panel2/MarginContainer/HBoxContainer"]
-margin_right = 512.0
-margin_bottom = 256.0
-rect_min_size = Vector2( 512, 256 )
-custom_styles/panel = SubResource( 2 )
-script = ExtResource( 1 )
+[node name="TopSpacing" type="Control" parent="AppBG/MarginContainer/VBoxContainer"]
+margin_right = 784.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel2/MarginContainer/HBoxContainer"]
-margin_left = 520.0
-margin_right = 648.0
-margin_bottom = 256.0
+[node name="HBoxContainer" type="HBoxContainer" parent="AppBG/MarginContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 784.0
+margin_bottom = 300.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 8
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="Panel2/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="VBox_Left" type="VBoxContainer" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 128.0
+margin_bottom = 264.0
+size_flags_vertical = 3
+custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button4" type="Button" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Left"]
+margin_right = 128.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 128, 32 )
+text = "Modify"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBox_Mid" type="VBoxContainer" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 136.0
+margin_right = 648.0
+margin_bottom = 264.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Graph" type="Panel" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Mid"]
+visible = false
+margin_right = 512.0
+margin_bottom = 146.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+script = ExtResource( 1 )
+
+[node name="Markers" type="Control" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Mid/Graph"]
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 4.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ViewportContainer" type="ViewportContainer" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Mid"]
+margin_right = 512.0
+margin_bottom = 264.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Viewport" type="Viewport" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Mid/ViewportContainer"]
+size = Vector2( 512, 264 )
+handle_input_locally = false
+usage = 0
+render_target_update_mode = 3
+
+[node name="VBox_Right" type="VBoxContainer" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 656.0
+margin_right = 784.0
+margin_bottom = 264.0
+size_flags_vertical = 3
+custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Right"]
 margin_right = 128.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 128, 32 )
@@ -69,7 +141,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button2" type="Button" parent="Panel2/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Button2" type="Button" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Right"]
 margin_top = 40.0
 margin_right = 128.0
 margin_bottom = 72.0
@@ -79,7 +151,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button3" type="Button" parent="Panel2/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Button3" type="Button" parent="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Right"]
 margin_top = 80.0
 margin_right = 128.0
 margin_bottom = 112.0
@@ -88,4 +160,11 @@ text = "Modify"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="Panel2/MarginContainer/HBoxContainer/VBoxContainer/Button" to="Panel2/MarginContainer/HBoxContainer/Panel" method="_on_DrawButton_pressed"]
+
+[node name="BottomSpacing" type="Control" parent="AppBG/MarginContainer/VBoxContainer"]
+margin_top = 304.0
+margin_right = 784.0
+margin_bottom = 336.0
+rect_min_size = Vector2( 0, 32 )
+mouse_filter = 2
+[connection signal="pressed" from="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Right/Button" to="AppBG/MarginContainer/VBoxContainer/HBoxContainer/VBox_Mid/Graph" method="_on_DrawButton_pressed"]
