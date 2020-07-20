@@ -1,0 +1,5 @@
+GUI
+ |- Viewport
+ |   |- Graph
+ |   |   |- Equation
+ |- Markers
