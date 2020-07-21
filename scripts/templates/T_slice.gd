@@ -1,0 +1,85 @@
+extends Node
+
+#class_name T_slice
+
+var graph = null;
+
+var slice_range = Rect2();
+var eqn = null;
+var draw_pts = [];
+var draw_n = 8;
+var dirty = true;
+
+enum {X, Y}
+
+
+func init(g):
+	graph = g;
+
+
+func set_eqn(type):
+	eqn = EquationMgr.equations[type].instance();
+
+
+func call_fn(x):
+	eqn.y.call_func(x);
+
+
+func config_as_first():
+	slice_range.position = Vector2(0,0);
+	slice_range.size = Vector2(64,64);
+	update_range();
+
+
+func update_range():
+	if (dirty):
+		make_draw_points();
+	
+	# x is fixed from graph
+	# so only update y
+	var y_min = draw_pts[0][Y];
+	var y_max = draw_pts[0][Y];
+	for i in range(draw_pts.size()):
+		y_min = min(y_min, draw_pts[i][Y]);
+		y_max = max(y_max, draw_pts[i][Y]);
+	slice_range.position[Y] = y_min;
+	slice_range.size[Y] = abs(y_max - y_min);
+
+
+func range_min_x():
+	return slice_range.position[X];
+
+func range_min_y():
+	return slice_range.position[Y];
+
+func range_max_x():
+	return slice_range.position[X] + slice_range.size[X];
+
+func range_max_y():
+	return slice_range.position[Y] + slice_range.size[Y];
+
+
+func get_draw_points(n_pts):
+	if (!dirty) && (n_pts == draw_n):
+		return draw_pts;
+	
+	draw_n = n_pts;
+	make_draw_points();
+	return draw_pts;
+
+
+func make_draw_points():
+	draw_pts.clear();
+	
+	for i in range(draw_n + 1):
+		var x = (i/draw_n);# * slice_range.size[X];
+		var y = eqn.y(x);
+		
+		x *= slice_range.size[X];
+		x += slice_range.position[X];
+		
+		y *= slice_range.size[X];
+		
+		draw_pts.push_back(Vector2(x, y));
+	
+	dirty = false;

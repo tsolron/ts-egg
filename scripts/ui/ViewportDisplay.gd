@@ -1,4 +1,3 @@
-#extends Panel
 extends ViewportContainer
 
 onready var T_graph = preload("res://scenes/graph.tscn");

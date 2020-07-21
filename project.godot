@@ -20,6 +20,10 @@ config/description="TSolron's Equations and Graphs for Games"
 run/main_scene="res://scenes/EGG.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+EquationMgr="*res://scripts/EquationMgr.gd"
+
 [display]
 
 window/size/width=800

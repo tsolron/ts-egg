@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/equations/EQN_linear.gd" type="Script" id=1]
+
+[node name="EQN_linear" type="Node"]
+script = ExtResource( 1 )

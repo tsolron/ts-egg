@@ -1,5 +1,32 @@
 GUI
  |- Viewport
  |   |- Graph
- |   |   |- Equation
+ |   |   |- Equation_Manager
+ |   |   |- Slice
+ |   |   |   |- Equation
+ |- Buttons
  |- Markers
+
+
+
+https://easings.net/
+
+
+func fn_ease_in_sine(x):
+	return 1 - cos((x * PI) / 2);
+
+func fn_ease_out_sine(x):
+	return -(cos(PI * x) - 1) / 2;
+
+func fn_ease_inout_sine(x):
+	return -(cos(PI * x) - 1) / 2;
+
+func fn_ease_in_expo(x):
+	if (x == 0):
+		return 0.0;
+	return pow(2, 10 * x - 10);
+
+func fn_ease_out_expo(x):
+	if (x == 1):
+		return 1;
+	return 1 - pow(2, -10 * x);

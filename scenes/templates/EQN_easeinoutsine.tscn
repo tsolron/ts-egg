@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/equations/EQN_easeinoutsine.gd" type="Script" id=1]
+
+[node name="EQN_EaseInOutSine" type="Node"]
+script = ExtResource( 1 )
