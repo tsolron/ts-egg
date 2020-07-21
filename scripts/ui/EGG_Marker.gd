@@ -21,7 +21,7 @@ func init(make_disabled):
 		#set("custom_styles/normal", T_style_editable);
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	update_text();
 
 

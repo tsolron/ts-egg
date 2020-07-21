@@ -7,7 +7,7 @@ const eqn_display_template = "y = %.2f";
 var b = null;
 var default_b = 0;
 
-func y(x):
+func y(_x):
 	if (b == null):
 		b = default_b;
 	

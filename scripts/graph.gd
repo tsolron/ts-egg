@@ -1,6 +1,6 @@
 extends Panel
 
-onready var vpc = get_parent().get_parent();
+#onready var vpc = get_parent().get_parent();
 onready var T_slice = preload("res://scenes/templates/T_slice.tscn");
 #onready var EquationMgr = preload("res://scripts/EquationMgr.gd");
 
@@ -21,7 +21,7 @@ func init():
 	add_slice_at(1, EquationMgr.EType.EASEINOUTSINE, -1);
 
 
-func _process(delta):
+func _process(_delta):
 	update_graph_data();
 	update();
 
@@ -80,7 +80,7 @@ func draw_graph_data():
 		var marker_x = slices[slice_idx].slice_range.position[X];
 		draw_line(
 				Vector2(marker_x + axis_offset[X], 0),
-				Vector2(marker_x + axis_offset[X], vpc.rect_size[Y]),
+				Vector2(marker_x + axis_offset[X], rect_size[Y]),
 				markerColor);
 		
 		if (slice_idx+1 < draw_pts_list.size()):
@@ -91,7 +91,7 @@ func draw_graph_data():
 			marker_x = slices[slice_idx].slice_range.position[X] + slices[slice_idx].slice_range.size[X];
 			draw_line(
 					Vector2(marker_x + axis_offset[X], 0),
-					Vector2(marker_x + axis_offset[X], vpc.rect_size[Y]),
+					Vector2(marker_x + axis_offset[X], rect_size[Y]),
 					markerColor);
 
 
@@ -102,7 +102,7 @@ func add_slice_at(n, eType, parity):
 	slice.set_eqn(eType, parity);
 	
 	if (slices.empty()):
-		slice.config_as_first(vpc.rect_size);
+		slice.config_as_first();
 		slices.push_back(slice);
 		return;
 	
@@ -117,10 +117,7 @@ func add_slice_at(n, eType, parity):
 		
 		slices[n].slice_range.position = offset;
 	
-	# logic for adjusting slices + sizes
-	# temp
-	#slice.config_as_first();
-	#slice.slice_range.position[X] = 64;
+	#TODO: Still need to automate size assignment
 	slice.slice_range.size[X] = 128;
 	
 

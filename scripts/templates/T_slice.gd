@@ -27,8 +27,8 @@ func call_fn(x):
 	eqn.y.call_func(x);
 
 
-func config_as_first(vpc_size):
-	#TODO
+func config_as_first():
+	#TODO: use graph.rect_size
 	slice_range.position = Vector2(0,0);
 	slice_range.size = Vector2(64,64);
 	update_range();

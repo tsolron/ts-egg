@@ -10,7 +10,7 @@ var markers = Array();
 var graph = null;
 
 func _ready():
-	get_tree().get_root().connect("size_changed", self, "screen_resize")
+	var _resize_signal = get_tree().get_root().connect("size_changed", self, "screen_resize");
 	
 	graph = T_graph.instance();
 	viewport.add_child(graph);
@@ -24,7 +24,7 @@ func _ready():
 	yield(get_tree(), "idle_frame")
 
 
-func _process(delta):
+func _process(_delta):
 	drag_markers();
 
 
