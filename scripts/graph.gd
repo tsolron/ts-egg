@@ -7,8 +7,11 @@ onready var T_slice = preload("res://scenes/templates/T_slice.tscn");
 enum {X, Y}
 
 var doDrawGraph = true;
+var doDrawSlice = false;
+var doDrawMarker = true;
 var lineColor = Color(1.0, 0.0, 0.0, 1.0);
 var markerColor = Color(0.0, 0.0, 1.0, 0.75);
+var sliceRegionColor = Color(1.0, 1.0, 0.0, 0.25);
 var slices = [];
 var graph_range = Rect2(0,0,0,0);
 var axis_offset = Vector2(32,32);
@@ -18,7 +21,7 @@ var dirty = true;
 
 func init():
 	add_slice_at(0, EquationMgr.EType.LINEAR, 1);
-	add_slice_at(1, EquationMgr.EType.EASEINOUTSINE, -1);
+	add_slice_at(1, EquationMgr.EType.EASEINOUTSINE, 1);
 
 
 func _process(_delta):
@@ -28,6 +31,7 @@ func _process(_delta):
 
 func _draw():
 	draw_graph_data();
+	draw_slice_regions();
 
 
 func update_graph_data():
@@ -62,37 +66,52 @@ func update_graph_bounds():
 
 
 func draw_graph_data():
-	if (!doDrawGraph):
-		return;
 	if (dirty):
 		update_graph_data();
 	
 	graph_range.position = Vector2(10,10);
+	var marker_x = 0;
 	
 	for slice_idx in range(draw_pts_list.size()):
 		var draw_pts = draw_pts_list[slice_idx];
 		
-		for idx in range(draw_pts.size() - 1):
-			var pt1 = draw_pts[idx] + axis_offset;
-			var pt2 = draw_pts[idx+1] + axis_offset;
-			draw_line(pt1, pt2, lineColor);
+		if (doDrawGraph):
+			for idx in range(draw_pts.size() - 1):
+				var pt1 = draw_pts[idx] + axis_offset;
+				var pt2 = draw_pts[idx+1] + axis_offset;
+				draw_line(pt1, pt2, lineColor);
 		
-		var marker_x = slices[slice_idx].slice_range.position[X];
-		draw_line(
-				Vector2(marker_x + axis_offset[X], 0),
-				Vector2(marker_x + axis_offset[X], rect_size[Y]),
-				markerColor);
+		if (doDrawMarker):
+			marker_x = slices[slice_idx].slice_range.position[X];
+			draw_line(
+					Vector2(marker_x + axis_offset[X], 0),
+					Vector2(marker_x + axis_offset[X], rect_size[Y]),
+					markerColor);
 		
 		if (slice_idx+1 < draw_pts_list.size()):
-			var pt1 = draw_pts[draw_pts.size()-1] + axis_offset;
-			var pt2 = draw_pts_list[slice_idx+1][0] + axis_offset;
-			draw_line(pt1, pt2, lineColor);
-		else:
+			if (doDrawGraph):
+				var pt1 = draw_pts[draw_pts.size()-1] + axis_offset;
+				var pt2 = draw_pts_list[slice_idx+1][0] + axis_offset;
+				draw_line(pt1, pt2, lineColor);
+		elif (doDrawMarker):
 			marker_x = slices[slice_idx].slice_range.position[X] + slices[slice_idx].slice_range.size[X];
 			draw_line(
 					Vector2(marker_x + axis_offset[X], 0),
 					Vector2(marker_x + axis_offset[X], rect_size[Y]),
 					markerColor);
+
+
+func draw_slice_regions():
+	if (!doDrawSlice):
+		return;
+	if (dirty):
+		update_graph_data();
+	
+	for slice_idx in range(draw_pts_list.size()):
+		var s_range = slices[slice_idx].slice_range;
+		s_range.position += axis_offset;
+		s_range.size[Y] *= slices[slice_idx].eqn_parity;
+		draw_rect(s_range, sliceRegionColor, true);
 
 
 func add_slice_at(n, eType, parity):
@@ -121,7 +140,18 @@ func add_slice_at(n, eType, parity):
 	slice.slice_range.size[X] = 128;
 	
 
-
+#TODO
 func rescale_slices():
 	
 	pass;
+
+
+#TODO
+func hideGData(type, value):
+	match(type):
+		"graph":
+			doDrawGraph = value;
+		"slice":
+			doDrawSlice = value;
+		"marker":
+			doDrawMarker = value;

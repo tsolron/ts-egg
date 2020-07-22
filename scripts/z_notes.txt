@@ -9,16 +9,24 @@ GUI
 
 
 
-https://easings.net/
 
+TODO:
+ * Toggles for drawing
+ * Yellow "slice region" for debug / clicks
+ * Markers (display only)
+ * Markers (draggable)
+ * Equation name at top
+ * Variables on right
+
+
+
+
+https://easings.net/
 
 func fn_ease_in_sine(x):
 	return 1 - cos((x * PI) / 2);
 
 func fn_ease_out_sine(x):
-	return -(cos(PI * x) - 1) / 2;
-
-func fn_ease_inout_sine(x):
 	return -(cos(PI * x) - 1) / 2;
 
 func fn_ease_in_expo(x):
