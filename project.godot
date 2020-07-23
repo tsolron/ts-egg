@@ -17,7 +17,7 @@ _global_script_class_icons={
 
 config/name="ts-egg"
 config/description="TSolron's Equations and Graphs for Games"
-run/main_scene="res://scenes/EGG.tscn"
+run/main_scene="res://scenes/App_EGG.tscn"
 config/icon="res://icon.png"
 
 [autoload]

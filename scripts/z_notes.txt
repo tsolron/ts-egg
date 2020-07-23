@@ -1,9 +1,9 @@
-GUI
+GUI (connects UI elements to Graph)
  |- Viewport
- |   |- Graph
+ |   |- Graph (Further scales/offsets slices based on pan/zoom/resolution)
  |   |   |- Equation_Manager
- |   |   |- Slice
- |   |   |   |- Equation
+ |   |   |- Slices (scales/offsets to slice region)
+ |   |   |   |- Equation (y = f(x))
  |- Buttons
  |- Markers
 
@@ -11,12 +11,18 @@ GUI
 
 
 TODO:
- * Toggles for drawing
- * Yellow "slice region" for debug / clicks
+ * Slice Panel instead of yellow region
  * Markers (display only)
  * Markers (draggable)
  * Equation name at top
+ * -> May require "Equation Name" added to EQNs
  * Variables on right
+ * Editable equations (ex. linear -> exponential)
+ * -> use the same vars where possible
+ * Add variable descriptions (tooltip?)
+ * Display full equation when selected
+ * Scroll zoom / pan
+ * 
 
 
 

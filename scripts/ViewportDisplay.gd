@@ -1,9 +1,9 @@
 extends ViewportContainer
 
-onready var T_graph = preload("res://scenes/graph.tscn");
+onready var T_graph = preload("res://scenes/templates/T_graph.tscn");
 onready var viewport = get_node("Viewport");
 onready var placeholder = get_node("Placeholder");
-onready var T_Marker = preload("res://scenes/EGG_Marker.tscn");
+onready var T_Marker = preload("res://scenes/templates/T_Marker.tscn");
 onready var N_Markers = get_parent().get_node("Markers");
 
 var markers = Array();

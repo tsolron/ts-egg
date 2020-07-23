@@ -3,7 +3,7 @@ extends Panel
 
 onready var vpc = get_node("MarginContainer/VBoxContainer/HBoxContainer/VBox_Mid/ViewportContainer");
 onready var left_buttons = get_node("MarginContainer/VBoxContainer/HBoxContainer/VBox_Left");
-onready var right_buttons = get_node("AppUI/MarginContainer/VBoxContainer/HBoxContainer/VBox_Right");
+onready var right_buttons = get_node("MarginContainer/VBoxContainer/HBoxContainer/VBox_Right");
 
 
 func _ready():
