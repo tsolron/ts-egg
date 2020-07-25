@@ -12,6 +12,7 @@ var doDrawMarker = true;
 var lineColor = Color(1.0, 0.0, 0.0, 1.0);
 var markerColor = Color(0.0, 0.0, 1.0, 0.75);
 var sliceRegionColor = Color(1.0, 1.0, 0.0, 0.25);
+var lineWidth = 2.0;
 var slices = [];
 var graph_range = Rect2(0,0,0,0);
 var axis_offset = Vector2(32,32);
@@ -79,26 +80,26 @@ func draw_graph_data():
 			for idx in range(draw_pts.size() - 1):
 				var pt1 = draw_pts[idx] + axis_offset;
 				var pt2 = draw_pts[idx+1] + axis_offset;
-				draw_line(pt1, pt2, lineColor);
+				draw_line(pt1, pt2, lineColor, lineWidth);
 		
 		if (doDrawMarker):
 			marker_x = slices[slice_idx].slice_range.position[X];
 			draw_line(
 					Vector2(marker_x + axis_offset[X], 0),
 					Vector2(marker_x + axis_offset[X], rect_size[Y]),
-					markerColor);
+					markerColor, lineWidth);
 		
 		if (slice_idx+1 < draw_pts_list.size()):
 			if (doDrawGraph):
 				var pt1 = draw_pts[draw_pts.size()-1] + axis_offset;
 				var pt2 = draw_pts_list[slice_idx+1][0] + axis_offset;
-				draw_line(pt1, pt2, lineColor);
+				draw_line(pt1, pt2, lineColor, lineWidth);
 		elif (doDrawMarker):
 			marker_x = slices[slice_idx].slice_range.position[X] + slices[slice_idx].slice_range.size[X];
 			draw_line(
 					Vector2(marker_x + axis_offset[X], 0),
 					Vector2(marker_x + axis_offset[X], rect_size[Y]),
-					markerColor);
+					markerColor, lineWidth);
 
 
 func draw_slice_regions():
