@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/templates/ui/T_btn_toggle.gd" type="Script" id=1]
+
+[node name="btnchk_toggle_graph" type="CheckButton"]
+margin_top = 160.0
+margin_right = 128.0
+margin_bottom = 194.0
+rect_min_size = Vector2( 0, 32 )
+size_flags_horizontal = 3
+text = "Graph"
+align = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+whenEnabledAction = ""
+whenDisabledAction = ""
+defaultTurnOff = true
+[connection signal="toggled" from="." to="." method="_on_btn_toggled"]

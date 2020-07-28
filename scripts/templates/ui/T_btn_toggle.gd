@@ -11,18 +11,18 @@ var isToggleOff;
 
 func _ready():
 	isToggleOff = defaultTurnOff;
-	if (isToggleOff):
-		self.text = label_template % [whenDisabledAction, targetDisplayName];
-	else:
-		self.text = label_template % [whenEnabledAction, targetDisplayName];
+	#if (isToggleOff):
+	#	self.text = label_template % [whenDisabledAction, targetDisplayName];
+	#else:
+	#	self.text = label_template % [whenEnabledAction, targetDisplayName];
 
 func _on_btn_toggled(button_pressed):
 	if (button_pressed):
 		isToggleOff = false;
-		self.text = label_template % [whenEnabledAction, targetDisplayName];
+		#self.text = label_template % [whenEnabledAction, targetDisplayName];
 		emit_signal("btn_toggle", targetDisplayName.to_lower(), true);
 		
 	else:
 		isToggleOff = true;
-		self.text = label_template % [whenDisabledAction, targetDisplayName];
+		#self.text = label_template % [whenDisabledAction, targetDisplayName];
 		emit_signal("btn_toggle", targetDisplayName.to_lower(), false);
