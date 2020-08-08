@@ -2,8 +2,6 @@ extends Node
 
 #class_name T_slice
 
-var graph = null;
-
 var slice_range = Rect2();
 var eqn = null;
 var eqn_parity = 1;
@@ -14,8 +12,8 @@ var dirty = true;
 enum {X, Y}
 
 
-func init(g):
-	graph = g;
+func init():
+	pass;
 
 
 func set_eqn(type, parity):
@@ -28,7 +26,7 @@ func call_fn(x):
 
 
 func config_as_first():
-	#TODO: use graph.rect_size
+	# optional var with width?
 	slice_range.position = Vector2(0,0);
 	slice_range.size = Vector2(64,64);
 
@@ -44,6 +42,14 @@ func range_max_x():
 
 func range_max_y():
 	return slice_range.position[Y] + slice_range.size[Y];
+
+func get_marker_min_coords():
+	#TODO
+	pass;
+
+func get_marker_max_coords():
+	#TODO
+	pass;
 
 
 func get_draw_points(n_pts):

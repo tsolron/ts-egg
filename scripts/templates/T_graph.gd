@@ -124,6 +124,7 @@ func add_slice_at(n, eType, parity):
 	if (slices.empty()):
 		slice.config_as_first();
 		slices.push_back(slice);
+		# add marker (2x)
 		return;
 	
 	slices.insert(n, slice);

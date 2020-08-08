@@ -5,11 +5,14 @@ onready var T_style_editable = preload("res://themes/sbflat_editable.tres");
 
 onready var l_edit = $LineEdit;
 
+var marker_num;
 var doDrag = false;
 var g_coords = Vector2(0,0);
 var label_text_template = "x: %.3f\r\ny: %.3f";
 
-func init(make_disabled):
+func init(make_disabled, n):
+	marker_num = n;
+	
 	if (make_disabled):
 		self.disabled = true;
 		self.button_mask = 0;
