@@ -45,7 +45,7 @@ func update_graph_data():
 	for slice in slices:
 		var slice_rect = slice.slice_range;
 		var percent_of_graph_size = max((slice_rect.size[0] / max(1,graph_range.size[0])),(slice_rect.size[1] / max(1,graph_range.size[1])));
-		var n_eqn_pts = min(256, max(16, (slice.eqn.bias * 10 * percent_of_graph_size)));
+		var n_eqn_pts = min(256, max(16, (slice.eqn.N_PTS_BIAS_MULTIPLIER * 10 * percent_of_graph_size)));
 		var draw_pts = slice.get_draw_points(n_eqn_pts);
 		draw_pts_list.push_back(draw_pts);
 	

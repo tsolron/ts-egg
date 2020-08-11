@@ -17,7 +17,8 @@ func init():
 
 
 func set_eqn(type, parity):
-	eqn = EquationMgr.equations[type].instance();
+	eqn = EquationMgr.T_equation.instance();
+	EquationMgr.configure(eqn, type)
 	eqn_parity = parity;
 
 

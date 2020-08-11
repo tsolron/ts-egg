@@ -23,12 +23,17 @@ config/icon="res://icon.png"
 [autoload]
 
 EquationMgr="*res://scripts/EquationMgr.gd"
+DB="*res://scripts/DB.gd"
 
 [display]
 
 window/size/width=800
 window/size/height=352
 window/stretch/aspect="keep"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "godot-sqlite" )
 
 [rendering]
 
