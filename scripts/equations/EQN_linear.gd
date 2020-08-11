@@ -4,21 +4,22 @@ extends Node
 const bias = 2;
 const display_name = "Linear";
 const eqn_display_template = "y = (%.2f * x) + %.2f";
+const eqn_command = "(m * x) + b";
+const eqn_param_defaults = { "m": 1, "b": 0, };
 
-var m = null;
-var default_m = 1;
-var b = null;
-var default_b = 0;
+var expression = Expression.new();
+var eqn_params = eqn_param_defaults.duplicate();
+
 
 func y(x):
-	if (m == null):
-		m = default_m;
-	
-	if (b == null):
-		b = default_b;
-	
-	return (m * x) + b;
+	var error = expression.parse(eqn_command, ["x"] + eqn_params.keys());
+	if (error != OK):
+		print("Error: Expression unable to be parsed");
+		return;
+	else:
+		return expression.execute([x] + eqn_params.values(), null, true);
 
 
 func get_eqn_display():
-	return eqn_display_template % [m, b];
+	return eqn_display_template % eqn_params.values();
+

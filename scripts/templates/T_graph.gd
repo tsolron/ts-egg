@@ -118,7 +118,7 @@ func draw_slice_regions():
 func add_slice_at(n, eType, parity):
 	var slice = T_slice.instance();
 	add_child(slice);
-	slice.init(self);
+	slice.init();
 	slice.set_eqn(eType, parity);
 	
 	if (slices.empty()):
