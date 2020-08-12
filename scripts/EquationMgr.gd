@@ -9,6 +9,9 @@ var eqn_disp_name = {  };
 
 
 func load_templates():
+	if (equation_templates != null):
+		return;
+	
 	equation_templates = DB.get_equation_templates();
 	for eqn_t in equation_templates:
 		eqn_disp_name[eqn_t["ID"]] = eqn_t["DISPLAY_NAME"].to_lower().replace(" ","");
@@ -21,7 +24,7 @@ func configure(eqn, type):
 			continue;
 		
 		eqn.DISPLAY_NAME = eqn_t["DISPLAY_NAME"];
-		eqn.EQN_Y_EQUALS = eqn_t["EQN_Y_EQUALS"];
+		eqn.EQN_Y_EQUALS = eqn_t["Y_EQUALS"];
 		
 		var p_names = eqn_t["PARAM_NAMES"].split(",", false);
 		var p_values = eqn_t["PARAM_VALUES"].split(",", false);

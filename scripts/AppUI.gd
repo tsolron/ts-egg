@@ -47,3 +47,6 @@ func get_rect2_max(u, v):
 	temp[0] = max(temp[0], v[0]);
 	temp[1] = max(temp[1], v[1]);
 	return temp;
+
+func shutdown():
+	get_tree().quit();

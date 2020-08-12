@@ -1,34 +1,41 @@
 extends Node
 
 const SQLite = preload("res://addons/godot-sqlite/bin/gdsqlite.gdns");
-var db;
-var db_path := "res://data/test";
-var json_path := "res://data/test.json";
+var db_templates;
+var db_templates_path := "res://data/templates";
+var db_user;
+var db_user_path := "res://data/user";
 
 
 func _ready():
 	startup();
-	#convert_to_json();
+	#convert_to_json(db_templates, db_templates_path);
 
 
 func startup():
-	db = SQLite.new();
-	db.path = db_path;
-	db.verbose_mode = true
-	db.open_db();
+	db_templates = SQLite.new();
+	db_templates.path = db_templates_path;
+	#db_templates.verbose_mode = true
+	db_templates.open_db();
+	
+	db_user = SQLite.new();
+	db_user.path = db_user_path;
+	#db_user.verbose_mode = true
+	db_user.open_db();
 
 
-func shutdown():
-	db.close_db();
+func _exit_tree():
+	db_templates.close_db();
+	db_user.close_db();
 
 
-func convert_to_json():
-	db.export_to_json(json_path);
+func convert_to_json(db, path):
+	db.export_to_json(path + ".json");
 
-func convert_to_db():
-	db.import_from_json(json_path);
+func convert_to_db(db, path):
+	db.import_from_json(path + ".json");
 
 
 func get_equation_templates():
-	db.query("SELECT * FROM [EQUATION_TEMPLATES_WITH_PARAMS];");
-	return db.query_result;
+	db_templates.query("SELECT * FROM [EQUATION_TEMPLATE_WITH_PARAMS];");
+	return db_templates.query_result;

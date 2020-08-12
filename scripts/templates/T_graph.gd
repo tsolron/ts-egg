@@ -22,8 +22,7 @@ var dirty = true;
 
 func init():
 	EquationMgr.load_templates();
-	add_slice_at(0, EquationMgr.EType["linear"], 1);
-	add_slice_at(1, EquationMgr.EType["easeinoutsine"], 1);
+	load_graph_data();
 
 
 func _process(_delta):
@@ -34,6 +33,12 @@ func _process(_delta):
 func _draw():
 	draw_graph_data();
 	draw_slice_regions();
+
+
+func load_graph_data():
+	
+	add_slice_at(0, EquationMgr.EType["linear"], 1);
+	add_slice_at(1, EquationMgr.EType["easeinoutsine"], 1);
 
 
 func update_graph_data():
