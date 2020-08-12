@@ -9,6 +9,7 @@ var DISPLAY_NAME = "";
 var EQN_DISPLAY_TEMPLATE = "";
 var EQN_Y_EQUALS = "";
 var EQN_PARAM_DEFAULTS = {  };
+var PARITY = 1.0;
 
 var expression = Expression.new();
 var eqn_params = null;
@@ -20,7 +21,7 @@ func y(x):
 		print("Error: Expression unable to be parsed");
 		return;
 	else:
-		return expression.execute([x] + eqn_params.values(), null, true);
+		return expression.execute([x] + eqn_params.values(), null, true) * PARITY;
 
 
 func get_eqn_display():

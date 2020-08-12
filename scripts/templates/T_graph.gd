@@ -6,18 +6,20 @@ onready var T_slice = preload("res://scenes/templates/T_slice.tscn");
 
 enum {X, Y}
 
-var doDrawGraph = true;
-var doDrawSlice = false;
-var doDrawMarker = true;
-var lineColor = Color(1.0, 0.0, 0.0, 1.0);
-var markerColor = Color(0.0, 0.0, 1.0, 0.75);
-var sliceRegionColor = Color(1.0, 1.0, 0.0, 0.25);
-var lineWidth = 2.0;
-var slices = [];
-var graph_range = Rect2(0,0,0,0);
-var axis_offset = Vector2(32,32);
-var draw_pts_list = [];
-var dirty = true;
+var doDrawGraph := true;
+var doDrawSlice := false;
+var doDrawMarker := true;
+var lineColor := Color(1.0, 0.0, 0.0, 1.0);
+var markerColor := Color(0.0, 0.0, 1.0, 0.75);
+var sliceRegionColor := Color(1.0, 1.0, 0.0, 0.25);
+var lineWidth := 2.0;
+var slices := [];
+var graph_range := Rect2(0,0,0,0);
+var axis_offset := Vector2(32,32);
+var draw_pts_list := [];
+var dirty := true;
+var graph_display_name := "";
+var dbd_graph = null;
 
 
 func init():
@@ -36,9 +38,22 @@ func _draw():
 
 
 func load_graph_data():
+	if (dbd_graph != null):
+		return;
 	
-	add_slice_at(0, EquationMgr.EType["linear"], 1);
-	add_slice_at(1, EquationMgr.EType["easeinoutsine"], 1);
+	dbd_graph = DB.get_graph_data(1);
+	
+	var slice_idx = 0;
+	for dbd_slice in dbd_graph:
+		graph_display_name = dbd_slice["GRAPH_NAME"];
+		var y_start = 0;
+		if (slice_idx > 0):
+			y_start = slices[slice_idx-1].end_y();
+		add_slice(slice_idx, dbd_slice, y_start);
+		slice_idx += 1;
+	
+	#add_slice_at(0, EquationMgr.EType["linear"], 1);
+	#add_slice_at(1, EquationMgr.EType["easeinoutsine"], 1);
 
 
 func update_graph_data():
@@ -117,36 +132,32 @@ func draw_slice_regions():
 	for slice_idx in range(draw_pts_list.size()):
 		var s_range = slices[slice_idx].slice_range;
 		s_range.position += axis_offset;
-		s_range.size[Y] *= slices[slice_idx].eqn_parity;
+		s_range.size[Y] *= slices[slice_idx].eqn.PARITY;
 		draw_rect(s_range, sliceRegionColor, true);
 
 
-func add_slice_at(n, eType, parity):
+func add_slice(idx, dbd_slice, y_start):
 	var slice = T_slice.instance();
 	add_child(slice);
-	slice.init();
-	slice.set_eqn(eType, parity);
 	
-	if (slices.empty()):
-		slice.config_as_first();
-		slices.push_back(slice);
-		# add marker (2x)
-		return;
+	var x_start = dbd_slice["SLICE_X_START"];
+	var x_end = dbd_slice["SLICE_X_END"];
 	
-	slices.insert(n, slice);
-	if (n == 0):
-		
-		pass
-	else:
-		var offset = Vector2();
-		offset[X] = slices[n-1].slice_range.position[X] + slices[n-1].slice_range.size[X];
-		offset[Y] = slices[n-1].eqn_parity * slices[n-1].eqn.y(offset[X]);
-		
-		slices[n].slice_range.position = offset;
-	
+	slice.init(x_start, x_end, y_start);
+	slice.set_eqn(dbd_slice);
+	slices.push_back(slice);
+
+
+#TODO: implement
+func insert_slice():
+	#var offset = Vector2();
+	#offset[X] = slices[n-1].slice_range.position[X] + slices[n-1].slice_range.size[X];
+	#offset[Y] = slices[n-1].eqn_parity * slices[n-1].eqn.y(offset[X]);
+	#slices[n].slice_range.position = offset;
 	#TODO: Still need to automate size assignment
-	slice.slice_range.size[X] = 128;
-	
+	#slice.slice_range.size[X] = 128;
+	pass;
+
 
 #TODO
 func rescale_slices():

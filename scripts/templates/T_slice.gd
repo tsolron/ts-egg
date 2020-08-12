@@ -4,7 +4,6 @@ extends Node
 
 var slice_range = Rect2();
 var eqn = null;
-var eqn_parity = 1;
 var draw_pts = [];
 var draw_n = 8;
 var dirty = true;
@@ -12,25 +11,38 @@ var dirty = true;
 enum {X, Y}
 
 
-func init():
-	pass;
+func init(x_start, x_end, y_start):
+	slice_range.position[X] = x_start;
+	slice_range.position[Y] = y_start;
+	slice_range.size[X] = x_end - x_start;
+	slice_range.size[Y] = slice_range.size[X];
 
 
-func set_eqn(type, parity):
+func set_eqn(dbd_slice):
 	eqn = EquationMgr.T_equation.instance();
-	EquationMgr.configure(eqn, type)
-	eqn_parity = parity;
+	
+	eqn.DISPLAY_NAME = dbd_slice["DISPLAY_NAME"];
+	eqn.EQN_Y_EQUALS = dbd_slice["Y_EQUALS"];
+	eqn.PARITY = dbd_slice["PARITY"];
+	
+	var p_names = dbd_slice["PARAM_NAMES"].split(",", false);
+	var p_values = dbd_slice["PARAM_VALUES"].split(",", false);
+	
+	var p_dict = {  };
+	for i in range(p_names.size()):
+		p_dict[p_names[i]] = float(p_values[i]);
+	
+	eqn.EQN_PARAM_DEFAULTS = p_dict.duplicate();
+	
+	eqn.set_params_to_default();
+	
 
 
 func call_fn(x):
 	eqn.y.call_func(x);
 
-
-func config_as_first():
-	# optional var with width?
-	slice_range.position = Vector2(0,0);
-	slice_range.size = Vector2(64,64);
-
+func end_y():
+	return slice_range.size[Y] * eqn.y(1) + slice_range.position[Y];
 
 func range_min_x():
 	return slice_range.position[X];
@@ -65,12 +77,12 @@ func get_draw_points(n_pts):
 func make_draw_points():
 	draw_pts.clear();
 	
-	var y_min = eqn_parity * eqn.y(0);
+	var y_min = eqn.PARITY * eqn.y(0);
 	var y_max = y_min;
 	
 	for i in range(draw_n + 1):
 		var x = (i/draw_n);# * slice_range.size[X];
-		var y = eqn_parity * eqn.y(x);
+		var y = eqn.y(x);
 		
 		x *= slice_range.size[X];
 		x += slice_range.position[X];
