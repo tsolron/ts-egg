@@ -1,51 +1,35 @@
 extends Node
-
 #class_name EquationMgr
 
+
 var T_equation = preload("res://scenes/templates/T_equation.tscn");
-
-enum EType {
-	CONSTANT,
-	LINEAR,
-	EASEINOUTSINE
-}
+var equation_templates = null;
+var EType = {  };
+var eqn_disp_name = {  };
 
 
-var eqn_nptsbias = [
-	1.0,
-	1.0,
-	1.0
-];
-
-var eqn_disp_name = [
-	"Constant",
-	"Linear",
-	"Ease In Out Sine"
-]
-
-var eqn_disp_template = [
-	"y = %.2f",
-	"y = (%.2f * x) + %.2f",
-	"y = -(cos(PI * x) - 1) / 2"
-];
-
-var eqn_y_equals = [
-	"b",
-	"(m * x) + b",
-	"-(cos(PI * x) - 1) / 2"
-];
-
-var eqn_param_defaults = [
-	{ "m": 0, "b": 0, },
-	{ "m": 1, "b": 0, },
-	{  }
-];
+func load_templates():
+	equation_templates = DB.get_equation_templates();
+	for eqn_t in equation_templates:
+		eqn_disp_name[eqn_t["ID"]] = eqn_t["DISPLAY_NAME"].to_lower().replace(" ","");
+		EType[eqn_t["DISPLAY_NAME"].to_lower().replace(" ","")] = eqn_t["ID"];
 
 
 func configure(eqn, type):
-	eqn.N_PTS_BIAS_MULTIPLIER = eqn_nptsbias[type];
-	eqn.DISPLAY_NAME = eqn_disp_name[type];
-	eqn.EQN_DISPLAY_TEMPLATE = eqn_disp_template[type];
-	eqn.EQN_Y_EQUALS = eqn_y_equals[type];
-	eqn.EQN_PARAM_DEFAULTS = eqn_param_defaults[type];
+	for eqn_t in equation_templates:
+		if (eqn_t["ID"] != type):
+			continue;
+		
+		eqn.DISPLAY_NAME = eqn_t["DISPLAY_NAME"];
+		eqn.EQN_Y_EQUALS = eqn_t["EQN_Y_EQUALS"];
+		
+		var p_names = eqn_t["PARAM_NAMES"].split(",", false);
+		var p_values = eqn_t["PARAM_VALUES"].split(",", false);
+		
+		var p_dict = {  };
+		for i in range(p_names.size()):
+			p_dict[p_names[i]] = float(p_values[i]);
+		
+		eqn.EQN_PARAM_DEFAULTS = p_dict.duplicate();
+	
 	eqn.set_params_to_default();

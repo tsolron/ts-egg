@@ -8,12 +8,13 @@ var json_path := "res://data/test.json";
 
 func _ready():
 	startup();
-	convert_to_json();
+	#convert_to_json();
 
 
 func startup():
 	db = SQLite.new();
 	db.path = db_path;
+	db.verbose_mode = true
 	db.open_db();
 
 
@@ -26,3 +27,8 @@ func convert_to_json():
 
 func convert_to_db():
 	db.import_from_json(json_path);
+
+
+func get_equation_templates():
+	db.query("SELECT * FROM [EQUATION_TEMPLATES_WITH_PARAMS];");
+	return db.query_result;

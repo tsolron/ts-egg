@@ -4,11 +4,11 @@ extends Node
 
 # for example, a sine function with a large amplitude may need
 #   more points to accurately depict than a linear function
-export var N_PTS_BIAS_MULTIPLIER = 1.0;
-export var DISPLAY_NAME = "Linear";
-export var EQN_DISPLAY_TEMPLATE = "y = (%.2f * x) + %.2f";
-export var EQN_Y_EQUALS = "(m * x) + b";
-export var EQN_PARAM_DEFAULTS = { "m": 1, "b": 0, };
+var N_PTS_BIAS_MULTIPLIER = 1.0;
+var DISPLAY_NAME = "";
+var EQN_DISPLAY_TEMPLATE = "";
+var EQN_Y_EQUALS = "";
+var EQN_PARAM_DEFAULTS = {  };
 
 var expression = Expression.new();
 var eqn_params = null;

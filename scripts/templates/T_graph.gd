@@ -21,8 +21,9 @@ var dirty = true;
 
 
 func init():
-	add_slice_at(0, EquationMgr.EType.LINEAR, 1);
-	add_slice_at(1, EquationMgr.EType.EASEINOUTSINE, 1);
+	EquationMgr.load_templates();
+	add_slice_at(0, EquationMgr.EType["linear"], 1);
+	add_slice_at(1, EquationMgr.EType["easeinoutsine"], 1);
 
 
 func _process(_delta):
