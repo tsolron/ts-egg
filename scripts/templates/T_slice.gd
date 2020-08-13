@@ -11,10 +11,10 @@ var dirty = true;
 enum {X, Y}
 
 
-func init(x_start, x_end, y_start):
+func init(x_start, x_width, y_start):
 	slice_range.position[X] = x_start;
 	slice_range.position[Y] = y_start;
-	slice_range.size[X] = x_end - x_start;
+	slice_range.size[X] = x_width;
 	slice_range.size[Y] = slice_range.size[X];
 
 

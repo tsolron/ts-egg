@@ -21,6 +21,11 @@ func _ready():
 	#var bve = right_buttons.get_node("btn_var_edit");
 	#bve.connect("btn_var_edit", self, "btn_var_edit_handler");
 
+
+func _input(event):
+	if (Input.is_action_pressed("exit")):
+		shutdown();
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	rect_size = get_rect2_max(OS.window_size, rect_min_size);

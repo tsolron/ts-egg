@@ -140,10 +140,10 @@ func add_slice(idx, dbd_slice, y_start):
 	var slice = T_slice.instance();
 	add_child(slice);
 	
-	var x_start = dbd_slice["SLICE_X_START"];
-	var x_end = dbd_slice["SLICE_X_END"];
+	var x_start = dbd_slice["SLICE_X"];
+	var x_width = dbd_slice["SLICE_WIDTH"];
 	
-	slice.init(x_start, x_end, y_start);
+	slice.init(x_start, x_width, y_start);
 	slice.set_eqn(dbd_slice);
 	slices.push_back(slice);
 
@@ -165,7 +165,6 @@ func rescale_slices():
 	pass;
 
 
-#TODO
 func hideGData(type, value):
 	match(type):
 		"graph":

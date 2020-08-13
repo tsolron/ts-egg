@@ -2,7 +2,7 @@ extends Node
 
 const SQLite = preload("res://addons/godot-sqlite/bin/gdsqlite.gdns");
 var db_templates;
-var db_templates_path := "res://data/templates";
+var db_templates_path := "res://data/egg-data";
 
 
 func _ready():
