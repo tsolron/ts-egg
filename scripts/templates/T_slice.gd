@@ -11,19 +11,25 @@ var dirty = true;
 enum {X, Y}
 
 
-func init(x_start, x_width, y_start):
-	slice_range.position[X] = x_start;
+func init(dbd_slice, y_start):
+	slice_range.position[X] = dbd_slice["SLICE_X"];
 	slice_range.position[Y] = y_start;
-	slice_range.size[X] = x_width;
+	slice_range.size[X] = dbd_slice["SLICE_WIDTH"];
 	slice_range.size[Y] = slice_range.size[X];
+	
+	set_eqn(dbd_slice);
 
 
 func set_eqn(dbd_slice):
 	eqn = EquationMgr.T_equation.instance();
 	
+	eqn.DISPLAY_TEMPLATE = dbd_slice["DISPLAY_TEMPLATE"];
 	eqn.DISPLAY_NAME = dbd_slice["DISPLAY_NAME"];
 	eqn.EQN_Y_EQUALS = dbd_slice["Y_EQUALS"];
+	eqn.N_PTS_BIAS_MULTIPLIER = dbd_slice["N_PTS_BIAS_MULTIPLIER"];
 	eqn.PARITY = dbd_slice["PARITY"];
+	eqn.IS_NORMALIZED = dbd_slice["IS_NORMALIZED"];
+	eqn.TRUNCATE_RANGE = Vector2(dbd_slice["TRUNCATE_RANGE_X"], dbd_slice["TRUNCATE_RANGE_WIDTH"]);
 	
 	var p_names = dbd_slice["PARAM_NAMES"].split(",", false);
 	var p_values = dbd_slice["PARAM_VALUES"].split(",", false);
@@ -32,7 +38,7 @@ func set_eqn(dbd_slice):
 	for i in range(p_names.size()):
 		p_dict[p_names[i]] = float(p_values[i]);
 	
-	eqn.EQN_PARAM_DEFAULTS = p_dict.duplicate();
+	eqn.EQN_PARAM_DEFAULTS = p_dict;
 	
 	eqn.set_params_to_default();
 	
@@ -65,41 +71,40 @@ func get_marker_max_coords():
 	pass;
 
 
+# includes slice location/size
 func get_draw_points(n_pts):
-	if (!dirty) && (n_pts == draw_n):
-		return draw_pts;
+	if ((n_pts != draw_n) || (dirty) || (eqn.dirty)):
+		draw_n = n_pts;
+		make_draw_points(eqn.get_n_pts(n_pts));
 	
-	draw_n = n_pts;
-	make_draw_points();
 	return draw_pts;
 
 
-func make_draw_points():
-	draw_pts.clear();
+# TODO: Move most of this to T_equaution
+# then eqn is only "dirty" if draw_n or the equation changes
+# and slice just fits draw_pts to the slice size
+func make_draw_points(eqn_pts):
+	if (eqn.IS_NORMALIZED):
+		#multiply by slice size
+		#offset by slice position
+		pass;
+	else:
+		#multiply by (slice size / truncate_size)
+		#offset by negative truncate_position, then slice position
+		pass;
 	
-	var y_min = eqn.PARITY * eqn.y(0);
-	var y_max = y_min;
 	
-	for i in range(draw_n + 1):
-		var x = (i/draw_n);# * slice_range.size[X];
-		var y = eqn.y(x);
-		
-		x *= slice_range.size[X];
-		x += slice_range.position[X];
-		
-		y_min = min(y_min, y);
-		y_max = max(y_max, y);
-		
-		y *= slice_range.size[X];
-		y += slice_range.position[Y];
-		
-		draw_pts.push_back(Vector2(x, y));
+	#OLD CODE
+	#var xy = Vector2(0,0);
+	#if (eqn.IS_NORMALIZED || (!eqn.IS_NORMALIZED && eqn.TRUNCATE_RANGE[X] == 0)):
+	#	xy[X] *= slice_range.size[X];
+	#	xy[X] += slice_range.position[X];
+	#	
+	#	xy[Y] *= slice_range.size[Y];
+	#	xy[Y] += slice_range.position[Y];
+	#else:
+	#	#TODO: need to subtract starting x from each 
 	
-	y_min *= slice_range.size[X];
-	y_min += slice_range.position[Y];
-	y_max *= slice_range.size[X];
-	y_max += slice_range.position[Y];
-	
-	slice_range.size[Y] = abs(y_max - y_min);
+	# draw_pts = something
 	
 	dirty = false;

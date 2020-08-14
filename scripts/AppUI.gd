@@ -22,7 +22,7 @@ func _ready():
 	#bve.connect("btn_var_edit", self, "btn_var_edit_handler");
 
 
-func _input(event):
+func _input(_event):
 	if (Input.is_action_pressed("exit")):
 		shutdown();
 
@@ -36,9 +36,9 @@ func btn_toggle_handler(type, value):
 	vpc.graph.hideGData(type, value);
 
 
-func btn_var_edit_handler(slice_idx, var_name, value):
-	
-	pass;
+#TODO: Is this used anywhere? / connected to a signal?
+#func btn_var_edit_handler(slice_idx, var_name, value):
+#	pass;
 
 
 func get_rect2_min(u, v):

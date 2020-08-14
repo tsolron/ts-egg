@@ -66,8 +66,8 @@ func update_graph_data():
 	for slice in slices:
 		var slice_rect = slice.slice_range;
 		var percent_of_graph_size = max((slice_rect.size[0] / max(1,graph_range.size[0])),(slice_rect.size[1] / max(1,graph_range.size[1])));
-		var n_eqn_pts = min(256, max(16, (slice.eqn.N_PTS_BIAS_MULTIPLIER * 10 * percent_of_graph_size)));
-		var draw_pts = slice.get_draw_points(n_eqn_pts);
+		var n_pts = min(256, max(16, (slice.eqn.N_PTS_BIAS_MULTIPLIER * 10 * percent_of_graph_size)));
+		var draw_pts = slice.get_draw_points(n_pts);
 		draw_pts_list.push_back(draw_pts);
 	
 	dirty = false;
@@ -140,11 +140,7 @@ func add_slice(idx, dbd_slice, y_start):
 	var slice = T_slice.instance();
 	add_child(slice);
 	
-	var x_start = dbd_slice["SLICE_X"];
-	var x_width = dbd_slice["SLICE_WIDTH"];
-	
-	slice.init(x_start, x_width, y_start);
-	slice.set_eqn(dbd_slice);
+	slice.init(dbd_slice, y_start);
 	slices.push_back(slice);
 
 
