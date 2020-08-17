@@ -24,6 +24,7 @@ config/icon="res://icon.png"
 
 EquationMgr="*res://scripts/EquationMgr.gd"
 DB="*res://scripts/DB.gd"
+H="*res://scenes/templates/H.tscn"
 
 [display]
 

@@ -1,5 +1,4 @@
 extends Node
-#class_name EQN_linear
 
 
 # for example, a sine function with a large amplitude may need
@@ -17,23 +16,19 @@ var TRUNCATE_RANGE := Vector2();
 var expression := Expression.new();
 var eqn_params := {  };
 var dirty := true;
-var pts_list := [];
+var pts_list := PoolVector2Array();
 var pts_n := 1;
-var n_pts_list := [];
+var n_pts_list := PoolVector2Array();
 var equation_range := Transform2D();
-#var eqn_size := Vector2.ZERO;
-#var eqn_size := Transform2D();
-#var first_point := 0.0;
-#var last_point := 0.0;
 
 
-enum {X, WIDTH}
+enum {X=0, WIDTH=1, Y=1}
 
 
 func init():
 	equation_range.origin.x = TRUNCATE_RANGE[X];
 	equation_range.x.x = TRUNCATE_RANGE[WIDTH];
-	get_n_pts(8.0);
+	get_n_pts(2);
 
 
 func y(x):
@@ -50,8 +45,10 @@ func get_n_pts(n_pts):
 		return n_pts_list;
 	
 	pts_n = n_pts;
-	pts_list.clear();
-	n_pts_list.clear();
+	while (pts_list.size() > 0):
+		pts_list.remove(0);
+	while (n_pts_list.size() > 0):
+		n_pts_list.remove(0);
 	
 	var y_min := 0.0;
 	var y_max := 0.0;
@@ -76,23 +73,12 @@ func get_n_pts(n_pts):
 		y_min = min(y_min, y);
 		y_max = max(y_max, y);
 		
-		pts_list.push_back(Transform2D(Vector2(1,0),Vector2(0,1), Vector2(x,y)));
+		pts_list.append(Vector2(x,y));
 	
 	equation_range.origin.y = y_min;
 	equation_range.y.y = abs(y_max - y_min);
 	
-	for pt in pts_list:
-		var t = pt;
-		t.origin -= equation_range.get_origin();
-		if (equation_range.x.x != 0):
-			t.x.x /= equation_range.x.x;
-		if (equation_range.y.y != 0):
-			t.y.y /= equation_range.y.y;
-		
-		if (t.origin.y > 200):
-			var abc = 123;
-		
-		n_pts_list.push_back(t);
+	n_pts_list = H.transform_reverse(equation_range, pts_list);
 	
 	dirty = false;
 	
