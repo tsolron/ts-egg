@@ -22,34 +22,18 @@ func init(dbd_slice):
 	
 	set_eqn(dbd_slice);
 	
-	update_slice_y_offset();
-	
 	#TODO: Will need to update these on eqn updates
 	#      Specifically equation_range and eqn_params
 	left_connection = eqn.n_pts_list[0];
 	right_connection = eqn.n_pts_list[eqn.n_pts_list.size()-1];
+	
+	update_slice_y_offset();
 
 
 func set_eqn(dbd_slice):
 	eqn = EquationMgr.T_equation.instance();
-	
-	eqn.DISPLAY_TEMPLATE = dbd_slice["DISPLAY_TEMPLATE"];
-	eqn.DISPLAY_NAME = dbd_slice["DISPLAY_NAME"];
-	eqn.EQN_Y_EQUALS = dbd_slice["Y_EQUALS"];
-	eqn.N_PTS_BIAS_MULTIPLIER = dbd_slice["N_PTS_BIAS_MULTIPLIER"];
-	eqn.PARITY = dbd_slice["PARITY"];
-	eqn.IS_NORMALIZED = dbd_slice["IS_NORMALIZED"];
-	eqn.TRUNCATE_RANGE = Vector2(dbd_slice["TRUNCATE_RANGE_X"],dbd_slice["TRUNCATE_RANGE_WIDTH"]);
-	
-	var p_names = dbd_slice["PARAM_NAMES"].split(",", false);
-	var p_values = dbd_slice["PARAM_VALUES"].split(",", false);
-	var p_dict = {  };
-	for i in range(p_names.size()):
-		p_dict[p_names[i]] = float(p_values[i]);
-	eqn.EQN_PARAM_DEFAULTS = p_dict;
-	
-	eqn.set_params_to_default();
-	eqn.init();
+	eqn.init(dbd_slice);
+	add_child(eqn);
 
 
 func call_fn(x):
@@ -101,22 +85,14 @@ func get_slice_space_pt(pt):
 
 func update_slice_y_offset():
 	var prev_offset := 0.0;
+	
 	#TODO: create singleton "empty slice" instead of using null
 	if (prev_slice != null):
-		var prev_slice_end_y = prev_slice.slice_range.xform(prev_slice.right_connection)[Y];
-		var prev_slice_origin = prev_slice.slice_range.origin.y;
-		prev_offset = prev_slice_origin + prev_slice_end_y;
+		prev_offset = prev_slice.slice_range.xform(prev_slice.right_connection)[Y];
 	
-	if (eqn.PARITY == 1):
-		var slice_mod = -(left_connection[Y] * slice_range.y.y);
-		slice_range.origin.y = prev_offset + slice_mod;
-	elif (eqn.PARITY == -1):
-		var slice_mod = -(1-(left_connection[Y] * slice_range.y.y));
-		slice_range.origin.y = prev_offset + slice_mod;
-	
-	print(slice_range.origin.y);
+	var slice_mod = (left_connection[Y] * slice_range.y.y);
+	slice_range.origin.y = prev_offset - slice_mod;
 	
 	if (next_slice != null):
 		next_slice.dirty = true;
-
 

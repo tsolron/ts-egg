@@ -7,10 +7,10 @@ var N_PTS_BIAS_MULTIPLIER := 1.0;
 var DISPLAY_TEMPLATE := "";
 var DISPLAY_NAME := "";
 var EQN_Y_EQUALS := "";
-var EQN_PARAM_DEFAULTS := {  };
 var PARITY := 1.0;
 var IS_NORMALIZED := true;
 var TRUNCATE_RANGE := Vector2();
+var EQN_PARAM_DEFAULTS := {  };
 
 
 var expression := Expression.new();
@@ -25,9 +25,28 @@ var equation_range := Transform2D();
 enum {X=0, WIDTH=1, Y=1}
 
 
-func init():
+func init(dbd_slice):
+	N_PTS_BIAS_MULTIPLIER = dbd_slice["N_PTS_BIAS_MULTIPLIER"];
+	DISPLAY_TEMPLATE = dbd_slice["DISPLAY_TEMPLATE"];
+	DISPLAY_NAME = dbd_slice["DISPLAY_NAME"];
+	EQN_Y_EQUALS = dbd_slice["Y_EQUALS"];
+	
+	PARITY = dbd_slice["PARITY"];
+	IS_NORMALIZED = dbd_slice["IS_NORMALIZED"];
+	TRUNCATE_RANGE = Vector2(dbd_slice["TRUNCATE_RANGE_X"],dbd_slice["TRUNCATE_RANGE_WIDTH"]);
+	
+	var p_names = dbd_slice["PARAM_NAMES"].split(",", false);
+	var p_values = dbd_slice["PARAM_VALUES"].split(",", false);
+	var p_dict = {  };
+	for i in range(p_names.size()):
+		p_dict[p_names[i]] = float(p_values[i]);
+	EQN_PARAM_DEFAULTS = p_dict;
+	
+	set_params_to_default();
+	
 	equation_range.origin.x = TRUNCATE_RANGE[X];
 	equation_range.x.x = TRUNCATE_RANGE[WIDTH];
+	
 	get_n_pts(2);
 
 
@@ -41,10 +60,14 @@ func y(x):
 
 
 func get_n_pts(n_pts):
-	if (!dirty && (n_pts == pts_n)):
-		return n_pts_list;
+	if (dirty || (n_pts != pts_n)):
+		pts_n = n_pts;
+		make_n_pts();
 	
-	pts_n = n_pts;
+	return n_pts_list;
+
+
+func make_n_pts():
 	while (pts_list.size() > 0):
 		pts_list.remove(0);
 	while (n_pts_list.size() > 0):
@@ -58,7 +81,7 @@ func get_n_pts(n_pts):
 	
 	var x_per_i := equation_range.x.x / pts_n;
 	
-	for i in range(pts_n + 1):
+	for i in range(pts_n):
 		
 		# x ∈ [0, 1]
 		# x ∈ [truncate range]
@@ -81,8 +104,6 @@ func get_n_pts(n_pts):
 	n_pts_list = H.transform_reverse(equation_range, pts_list);
 	
 	dirty = false;
-	
-	return n_pts_list;
 
 
 func get_eqn_display():

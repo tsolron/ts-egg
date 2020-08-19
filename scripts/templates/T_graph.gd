@@ -48,12 +48,9 @@ func load_graph_data():
 	for dbd_slice in dbd_graph:
 		graph_display_name = dbd_slice["GRAPH_NAME"];
 		
-		# use insert with slice_idx later
+		#TODO: use insert with slice_idx later
 		add_slice(dbd_slice);
 		slice_idx += 1;
-	
-	#add_slice_at(0, EquationMgr.EType["linear"], 1);
-	#add_slice_at(1, EquationMgr.EType["easeinoutsine"], 1);
 
 
 func update_graph_data():
