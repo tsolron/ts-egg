@@ -8,9 +8,26 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "Equation",
+"language": "GDScript",
+"path": "res://scripts/templates/T_equation.gd"
+}, {
+"base": "Panel",
+"class": "Graph",
+"language": "GDScript",
+"path": "res://scripts/templates/T_graph.gd"
+}, {
+"base": "Node",
+"class": "Slice",
+"language": "GDScript",
+"path": "res://scripts/templates/T_slice.gd"
+} ]
 _global_script_class_icons={
-
+"Equation": "",
+"Graph": "",
+"Slice": ""
 }
 
 [application]

@@ -1,4 +1,6 @@
 extends Panel
+class_name Graph
+
 
 #onready var vpc = get_parent().get_parent();
 onready var T_slice = preload("res://scenes/templates/T_slice.tscn");
@@ -19,7 +21,7 @@ var axis_offset := Transform2D(Vector2(1,0), Vector2(0,1), Vector2(32,32));
 var draw_pts_list := PoolVector2Array();
 var dirty := true;
 var graph_display_name := "";
-var dbd_graph = null;
+var dbd_graph: Array = Array();
 
 
 func init():
@@ -39,29 +41,30 @@ func _draw():
 
 
 func load_graph_data():
-	if (dbd_graph != null):
+	if (dbd_graph.size() > 0):
 		return;
 	
 	dbd_graph = DB.get_graph_data(1);
 	
-	var slice_idx = 0;
+	#var slice_idx = 0;
 	for dbd_slice in dbd_graph:
 		graph_display_name = dbd_slice["GRAPH_NAME"];
 		
 		#TODO: use insert with slice_idx later
 		add_slice(dbd_slice);
-		slice_idx += 1;
+		#slice_idx += 1;
 
 
 func update_graph_data():
 	if (!dirty): return;
 	
 	#draw_pts_list.clear();
+	#TODO: Ensure this works properly
 	while (draw_pts_list.size() > 0):
 		draw_pts_list.remove(0);
 	
 	for idx in range(slices.size()):
-		var slice_rect = slices[idx].slice_range;
+		#var slice_rect = slices[idx].slice_range;
 		#TODO: Make smart code for n_pts
 		#var percent_of_graph_size = max((slice_rect.size[0] / max(1,graph_range.size[0])),(slice_rect.size[1] / max(1,graph_range.size[1])));
 		#var n_pts = min(256, max(16, (slice.eqn.N_PTS_BIAS_MULTIPLIER * 10 * percent_of_graph_size)));

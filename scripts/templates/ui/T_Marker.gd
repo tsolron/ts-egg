@@ -3,14 +3,17 @@ extends ToolButton
 onready var T_style_disabled = preload("res://themes/sbflat_disabled.tres");
 onready var T_style_editable = preload("res://themes/sbflat_editable.tres");
 
-onready var l_edit = $LineEdit;
+onready var l_edit := $LineEdit;
+var label_text_template := "x: %.3f\r\ny: %.3f";
 
-var marker_num;
-var doDrag = false;
-var g_coords = Vector2(0,0);
-var label_text_template = "x: %.3f\r\ny: %.3f";
 
-func init(make_disabled, n):
+
+var marker_num: int;
+var doDrag := false;
+var g_coords := Vector2(0,0);
+
+
+func init(make_disabled: bool, n: int):
 	marker_num = n;
 	
 	if (make_disabled):
@@ -39,15 +42,15 @@ func _on_EGG_Marker_button_up():
 	doDrag = false;
 
 
-func get_x():
+func get_x() -> float:
 	return rect_position[0];
 
 
-func set_gcoords(gc):
+func set_gcoords(gc: Vector2):
 	g_coords = gc;
 	
-func update_x(scale_x):
+func update_x(scale_x: float):
 	set_position(Vector2((g_coords[0] * scale_x) - rect_size[0]/2, 0));
 
-func get_percent():
+func get_percent() -> float:
 	return g_coords[0];

@@ -1,4 +1,5 @@
 extends Node
+class_name Equation
 
 
 # for example, a sine function with a large amplitude may need
@@ -17,7 +18,7 @@ var expression := Expression.new();
 var eqn_params := {  };
 var dirty := true;
 var pts_list := PoolVector2Array();
-var pts_n := 1;
+var pts_n := 2;
 var n_pts_list := PoolVector2Array();
 var equation_range := Transform2D();
 
@@ -47,19 +48,20 @@ func init(dbd_slice):
 	equation_range.origin.x = TRUNCATE_RANGE[X];
 	equation_range.x.x = TRUNCATE_RANGE[WIDTH];
 	
-	get_n_pts(2);
+	# Uses the default (2) points, used for creating default slice_size
+	make_n_pts();
 
 
-func y(x):
+func y(x: float) -> float:
 	var error = expression.parse(EQN_Y_EQUALS, ["x"] + eqn_params.keys());
 	if (error != OK):
 		print("Error: Expression unable to be parsed");
-		return;
+		return 0.0;
 	else:
 		return expression.execute([x] + eqn_params.values(), null, true) * PARITY;
 
 
-func get_n_pts(n_pts):
+func get_n_pts(n_pts: int) -> PoolVector2Array:
 	if (dirty || (n_pts != pts_n)):
 		pts_n = n_pts;
 		make_n_pts();
@@ -68,6 +70,7 @@ func get_n_pts(n_pts):
 
 
 func make_n_pts():
+	#TODO: Ensure this works properly
 	while (pts_list.size() > 0):
 		pts_list.remove(0);
 	while (n_pts_list.size() > 0):
@@ -106,7 +109,7 @@ func make_n_pts():
 	dirty = false;
 
 
-func get_eqn_display():
+func get_eqn_display() -> String:
 	return DISPLAY_TEMPLATE % eqn_params.values();
 
 
