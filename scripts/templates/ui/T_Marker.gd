@@ -8,7 +8,7 @@ var label_text_template := "x: %.3f\r\ny: %.3f";
 
 
 
-var marker_num: int;
+var marker_num := 0;
 var doDrag := false;
 var g_coords := Vector2(0,0);
 

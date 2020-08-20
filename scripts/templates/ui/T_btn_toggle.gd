@@ -4,7 +4,7 @@ signal btn_toggle(type, value);
 
 export var targetDisplayName: String = "Graph";
 export var defaultTurnOff: bool = false;
-var isToggleOff: bool = false;
+var isToggleOff := false;
 
 func _ready():
 	isToggleOff = defaultTurnOff;

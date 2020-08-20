@@ -21,7 +21,7 @@ var axis_offset := Transform2D(Vector2(1,0), Vector2(0,1), Vector2(32,32));
 var draw_pts_list := PoolVector2Array();
 var dirty := true;
 var graph_display_name := "";
-var dbd_graph: Array = Array();
+var dbd_graph := [];
 
 
 func init():
