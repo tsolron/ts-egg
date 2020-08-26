@@ -38,6 +38,7 @@ func _process(_delta):
 func _draw():
 	draw_graph_data();
 	draw_slice_regions();
+	draw_slice_borders();
 
 
 func load_graph_data():
@@ -112,6 +113,35 @@ func draw_slice(slice):
 	s_range.position = axis_offset.xform(slice.slice_range.get_origin());
 	s_range.size = slice.slice_range.get_scale();
 	draw_rect(s_range, sliceRegionColor, true);
+
+
+#TODO: Improve y-coordinate in function ("works" but kind of "hacky")
+func draw_slice_borders():
+	if (!doDrawMarker):
+		return;
+	if (dirty):
+		update_graph_data();
+	
+	var border_pts := PoolVector2Array();
+	for slice_idx in range(slices.size()):
+		var temp = slices[slice_idx].slice_range.origin;
+		temp[Y] = -graph_range.y.y;
+		border_pts.push_back(temp);
+		temp[Y] = graph_range.y.y * 2;
+		border_pts.push_back(temp);
+	
+	var end_border_pt1 = slices.back().slice_range.origin;
+	end_border_pt1[X] += slices.back().slice_range.x.x;
+	end_border_pt1[Y] = -graph_range.y.y;
+	var end_border_pt2 = end_border_pt1;
+	end_border_pt2[Y] = graph_range.y.y * 2;
+	
+	border_pts.push_back(end_border_pt1);
+	border_pts.push_back(end_border_pt2);
+	
+	border_pts = axis_offset.xform(border_pts);
+	
+	draw_multiline(border_pts, markerColor);
 
 
 func add_slice(dbd_slice):
